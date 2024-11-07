@@ -1,17 +1,16 @@
-const { ethers } = require("hardhat");
 
-async function main() {
-    const [deployer] = await ethers.getSigners();
-    const LazyNFT = await ethers.getContractFactory("LazyNFT");
+const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
+const minter = "0x117230682974d73f2DB5C21F0268De2fACB0119f"
 
-    // Deploying the contract with deployer as the minter
-    const lazyNFT = await LazyNFT.deploy(deployer.address);
-    await lazyNFT.deployed();
 
-    console.log("LazyNFT deployed to:", lazyNFT.address);
-}
+module.exports = buildModule("LazyNFTModule", (m) => {
+    
 
-main().catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
+
+  const lazyNft = m.contract("LazyNFT", [minter]);
+
+  return { lazyNft };
 });
+
+
+
