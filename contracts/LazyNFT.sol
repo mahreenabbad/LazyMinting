@@ -17,14 +17,14 @@ contract LazyNFT is ERC721URIStorage, EIP712 {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   string private constant SIGNING_DOMAIN = "LazyNFT-Voucher";
   string private constant SIGNATURE_VERSION = "1";
- 
+ address public signer;
 
 //signer is minter
 
-  constructor(address payable minter)
+  constructor(address payable _minter)
     ERC721("LazyNFT", "LAZ") 
     EIP712(SIGNING_DOMAIN, SIGNATURE_VERSION) {
-    
+    signer = _minter;
     
     }
 
@@ -41,7 +41,7 @@ contract LazyNFT is ERC721URIStorage, EIP712 {
 
 
   function redeem(NFTVoucher calldata voucher) public payable  {
-    require(msg.sender == _verify(voucher) );// make sure that the signer is authorized to mint NFTs
+    require(signer == _verify(voucher),"wrong signature" );// make sure that the signer is authorized to mint NFTs
     require(msg.value >= voucher.price, "Insufficient funds to redeem");
 
     
@@ -53,7 +53,7 @@ contract LazyNFT is ERC721URIStorage, EIP712 {
   }
 
 
-function _verify(NFTVoucher calldata voucher) internal view returns(address signer){
+function _verify(NFTVoucher calldata voucher) internal view returns(address ){
  bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(
             //function selector
             keccak256("NFTVoucher(uint256 tokenId,uint256 price,string uri)"),
@@ -61,7 +61,7 @@ function _verify(NFTVoucher calldata voucher) internal view returns(address sign
             voucher.price,
             keccak256(bytes(voucher.uri))
      )));
-     return signer = ECDSA.recover(digest,  voucher.signature);
+     return  ECDSA.recover(digest,  voucher.signature);
 }
  
 //    function _hash(NFTVoucher calldata voucher) internal view returns(bytes32){

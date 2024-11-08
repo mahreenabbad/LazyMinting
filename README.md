@@ -12,3 +12,12 @@ npx hardhat node
 
 
 ```
+//COMPILE
+npx hardhat compile
+
+//DEPLOY
+ npx hardhat ignition deploy ./ignition/modules/LazyNFT.js --network sepolia  
+
+ //CREATE VOUCHER
+  npx hardhat run ./utils/createVoucher.js --network sepolia
+
