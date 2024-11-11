@@ -53,7 +53,7 @@ contract LazyNFT is ERC721URIStorage, EIP712 {
   }
 
 
-function _verify(NFTVoucher calldata voucher) internal view returns(address ){
+function _verify(NFTVoucher calldata voucher) internal view returns(address s){
  bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(
             //function selector
             keccak256("NFTVoucher(uint256 tokenId,uint256 price,string uri)"),
@@ -61,30 +61,14 @@ function _verify(NFTVoucher calldata voucher) internal view returns(address ){
             voucher.price,
             keccak256(bytes(voucher.uri))
      )));
-     return  ECDSA.recover(digest,  voucher.signature);
+     return s = ECDSA.recover(digest,  voucher.signature);
 }
  
-//    function _hash(NFTVoucher calldata voucher) internal view returns(bytes32){
-//         return _hashTypedDataV4(keccak256(abi.encode(
-//             //function selector
-//             keccak256("NFTVoucher(uint256 tokenId,uint256 price,string uri)"),
-//             voucher.tokenId,
-//             voucher.price,
-//             keccak256(bytes(voucher.uri))
-//         )));
-//     }
-     
-//       function _verify(NFTVoucher calldata voucher) internal view returns(address){
-//         bytes32 digest = _hash(voucher);
-//         //returns signer
-//         return ECDSA.recover(digest, voucher.signature);
-//     }
-
      function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721URIStorage) returns (bool){
         return ERC721.supportsInterface(interfaceId) || supportsInterface(interfaceId);
     }
 
    
 }
-// LazyNFTModule#LazyNFT - 0xBB0bB5288ed7aCE530A33fE940A7c194Ba8ada0C
+
 
