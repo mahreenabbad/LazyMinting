@@ -61,7 +61,7 @@ function _verify(NFTVoucher calldata voucher) internal view returns(address s){
             voucher.price,
             keccak256(bytes(voucher.uri))
      )));
-     return s = ECDSA.recover(digest,  voucher.signature);
+     return s= ECDSA.recover(digest,  voucher.signature);
 }
  
      function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721URIStorage) returns (bool){
